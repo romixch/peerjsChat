@@ -19,11 +19,62 @@
     <![endif]-->
   </head>
   <body>
-    <h1>Hello, world!</h1>
-
+    <h1>Peer JS Chat</h1>
+    
+    PeerJS Host: <input id="host" value="127.0.0.1" /><br/>
+    PeerJS Port: <input id="port" value="9000" /><br/>
+    <button id="connectToPeerJS">Connect to peer server</button><br/><br/>
+    
+    My id: <div id="myid"></div>
+    Other id: <input id="otherid" /><br/>
+    <button id="connectToPeer">Connect with peer</button><br/>
+    Connected with: <div id="connectedWith">Not yet connected!</div><br/>
+    
+    <input id="message" />
+    <button id="post">Post message</button>
+    
+    <p id="chat"></p>
+    
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+    <script lang="JavaScript">
+      $('#connectToPeerJS').on('click', function() {
+        var peer = new Peer({host: $('#host').val(), port: $('#port').val()});
+        peer.on('open', function(id) {
+          $('#myid').text(id);
+          
+          $('#connectToPeer').on('click', function() {
+            var otherid = $('#otherid').val();
+            var conn = peer.connect(otherid);
+            attachConnectionToChat(conn);
+          });
+          
+          peer.on('connection', function(conn) {
+            attachConnectionToChat(conn);
+          });
+        });
+      });
+      
+      var attachConnectionToChat = function(conn) {
+        var connectedWith = $('#connectedWith');
+        connectedWith.text(conn.peer);
+        
+        var chatElem = $('#chat');
+        
+        conn.on('data', function(data) {
+          chatElem.append('<div>' + conn.peer + ': ' + data + '</div>');
+        });
+        
+        $('#post').on('click', function() {
+          var message = $('#message');
+          conn.send(message.val());
+          chatElem.append('<div>me: ' + message.val() + '</div>');
+          $('#message').val('');
+        });
+      };
+    </script>
   </body>
 </html>
