@@ -42,7 +42,7 @@
           <label for="ssl">Connect with SSL</label>
         </div>
         
-        <button id="connectToPeerJS" class="btn btn-default">Connect to peer server</button>
+        <button id="connectToPeerJS" class="btn btn-default">Connect to PeerJS server</button>
       </form>
       <br/><br/>
       <form>
@@ -57,9 +57,13 @@
         
         <button id="connectToPeer" class="btn btn-default">Connect with peer</button><br/>
         Connected with: <div id="connectedWith">Not yet connected!</div><br/>
-        
-        <input id="message" />
-        <button id="post">Post message</button>
+        </form>
+        <form>
+          <div class="form-group">
+            <label for="message">Message</label>
+            <input id="message" class="form-control" />
+          </div>
+          <button id="post" class="btn btn-default">Post message</button>
         
         <p id="chat"></p>
       </form>
@@ -70,6 +74,7 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
+    <script type="text/javascript" src="js/jquery.qrcode.min.js"></script>
     <script lang="JavaScript">
       $('#connectToPeerJS').on('click', function() {
         var peer = new Peer({
