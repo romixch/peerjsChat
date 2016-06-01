@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Bootstrap 101 Template</title>
+    <title>Peer JS Chat</title>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
@@ -19,22 +19,44 @@
     <![endif]-->
   </head>
   <body>
-    <h1>Peer JS Chat</h1>
+    <div class="container">
+      
+            
+      <h1>Peer JS Chat</h1>
+      
+      <form>
+        <div class="form-group">
+          <label for="host">PeerJS Host</label>
+          <input id="host" value="127.0.0.1" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label for="id">PeerJS Port</label>
+          <input id="port" value="9000" class="form-control"/>
+        </div>
+        
+        <button id="connectToPeerJS" class="btn btn-default">Connect to peer server</button>
+      </form>
+      <br/><br/>
+      <form>
+        <div class="form-group">
+          <label for="myid">My id</label>
+          <input id="myid" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label for="otherid">Other id</label>
+          <input id="otherid" class="form-control"/>
+        </div>
+        
+        <button id="connectToPeer" class="btn btn-default">Connect with peer</button><br/>
+        Connected with: <div id="connectedWith">Not yet connected!</div><br/>
+        
+        <input id="message" />
+        <button id="post">Post message</button>
+        
+        <p id="chat"></p>
+      </form>
     
-    PeerJS Host: <input id="host" value="127.0.0.1" /><br/>
-    PeerJS Port: <input id="port" value="9000" /><br/>
-    <button id="connectToPeerJS">Connect to peer server</button><br/><br/>
-    
-    My id: <div id="myid"></div>
-    Other id: <input id="otherid" /><br/>
-    <button id="connectToPeer">Connect with peer</button><br/>
-    Connected with: <div id="connectedWith">Not yet connected!</div><br/>
-    
-    <input id="message" />
-    <button id="post">Post message</button>
-    
-    <p id="chat"></p>
-    
+    </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -44,7 +66,7 @@
       $('#connectToPeerJS').on('click', function() {
         var peer = new Peer({host: $('#host').val(), port: $('#port').val()});
         peer.on('open', function(id) {
-          $('#myid').text(id);
+          $('#myid').val(id);
           
           $('#connectToPeer').on('click', function() {
             var otherid = $('#otherid').val();
