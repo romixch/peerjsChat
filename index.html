@@ -27,11 +27,19 @@
       <form>
         <div class="form-group">
           <label for="host">PeerJS Host</label>
-          <input id="host" value="127.0.0.1" class="form-control"/>
+          <input id="host" value="dev.datagnan.com" class="form-control"/>
         </div>
         <div class="form-group">
           <label for="id">PeerJS Port</label>
-          <input id="port" value="9000" class="form-control"/>
+          <input id="port" value="443" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label for="path">PeerJS Path</label>
+          <input id="path" value="/peerjs" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <input id="ssl" type="checkbox" checked="checked"/>
+          <label for="ssl">Connect with SSL</label>
         </div>
         
         <button id="connectToPeerJS" class="btn btn-default">Connect to peer server</button>
@@ -64,7 +72,12 @@
     <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
     <script lang="JavaScript">
       $('#connectToPeerJS').on('click', function() {
-        var peer = new Peer({host: $('#host').val(), port: $('#port').val()});
+        var peer = new Peer({
+			host: $('#host').val(),
+			port: $('#port').val(),
+			path: $('#path').val(),
+			secure: $('#ssl').is(':checked')
+		});
         peer.on('open', function(id) {
           $('#myid').val(id);
           
@@ -78,6 +91,7 @@
             attachConnectionToChat(conn);
           });
         });
+        return false;
       });
       
       var attachConnectionToChat = function(conn) {
