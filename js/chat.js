@@ -54,6 +54,7 @@ $('#connectToPeerJS').on('click', function () {
             var otherid = $('#otherid').val();
             var conn = peer.connect(otherid);
             attachConnectionToChat(conn);
+            return false;
         });
 
         peer.on('connection', function (conn) {
@@ -78,6 +79,7 @@ var attachConnectionToChat = function (conn) {
         conn.send(message.val());
         chatElem.append('<div>me: ' + message.val() + '</div>');
         $('#message').val('');
+        return false;
     });
 };
 
