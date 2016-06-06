@@ -1,40 +1,20 @@
-var QueryString = function () {
-    // This function is anonymous, is executed immediately and 
-    // the return value is assigned to QueryString!
-    var query_string = {};
-    var query = window.location.search.substring(1);
-    var vars = query.split("&");
-    for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split("=");
-        // If first entry with this name
-        if (typeof query_string[pair[0]] === "undefined") {
-            query_string[pair[0]] = decodeURIComponent(pair[1]);
-            // If second entry with this name
-        } else if (typeof query_string[pair[0]] === "string") {
-            var arr = [query_string[pair[0]], decodeURIComponent(pair[1])];
-            query_string[pair[0]] = arr;
-            // If third or later entry with this name
-        } else {
-            query_string[pair[0]].push(decodeURIComponent(pair[1]));
-        }
-    }
-    return query_string;
-} ();
+var uri = URI(window.location.href);
+var query = uri.search(true);
 
-if (QueryString.host) {
-    $('#host').val(QueryString.host);
+if (query.host) {
+    $('#host').val(query.host);
 }
-if (QueryString.port) {
-    $('#port').val(QueryString.port);
+if (query.port) {
+    $('#port').val(query.port);
 }
-if (QueryString.path) {
-    $('#path').val(QueryString.path);
+if (query.path) {
+    $('#path').val(query.path);
 }
-if (QueryString.ssl) {
-    $('#ssl').prop('checked', QueryString.ssl === 'true');
+if (query.ssl) {
+    $('#ssl').prop('checked', query.ssl === 'true');
 }
-if (QueryString.otherId) {
-    $('#otherid').val(QueryString.otherId);
+if (query.otherId) {
+    $('#otherid').val(query.otherId);
 }
 
 $('#connectToPeerJS').on('click', function () {
@@ -84,15 +64,14 @@ var attachConnectionToChat = function (conn) {
 };
 
 var generateQRCode = function (id) {
-    var url = window.location.href;
-    if (url.indexOf('?') < 0) {
-        url = url + '?';
-    }
-    url += 'host=' + $('#host').val()
-        + '&port=' + $('#port').val()
-        + '&path=' + encodeURIComponent($('#path').val())
-        + '&ssl=' + ($('#ssl').is(':checked') ? 'true' : 'false')
-        + '&otherId=' + id;
-    console.log(url);
-    $('#qrcode').qrcode(url);
+    var linkUri = URI(window.location.href);
+    linkUri.search({
+        host: $('#host').val(),
+        port: $('#port').val(),
+        path: $('#path').val(),
+        ssl: ($('#ssl').is(':checked') ? 'true' : 'false'),
+        otherId: id
+    });
+    console.log(linkUri.href());
+    $('#qrcode').qrcode(linkUri.href());
 };
