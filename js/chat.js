@@ -1,3 +1,39 @@
+var connectToPeerJS = function () {
+    peer = new Peer({
+        host: $('#host').val(),
+        port: $('#port').val(),
+        path: $('#path').val(),
+        secure: $('#ssl').is(':checked')
+    });
+
+    peer.on('open', function (id) {
+        $('#myid').val(id);
+
+        generateQRCode(id);
+
+        $('#connectToPeer').on('click', connectToPeer);
+
+        peer.on('connection', function (conn) {
+            attachConnectionToChat(conn);
+        });
+        
+        if ($('#otherid').val()) {
+            connectToPeer();
+        }
+    });
+    return false;
+}
+
+var connectToPeer = function () {
+    var otherid = $('#otherid').val();
+    var conn = peer.connect(otherid);
+    attachConnectionToChat(conn);
+    return false;
+};
+
+$('#connectToPeerJS').on('click', connectToPeerJS);
+
+var peer = {};
 var uri = URI(window.location.href);
 var query = uri.search(true);
 
@@ -16,33 +52,9 @@ if (query.ssl) {
 if (query.otherId) {
     $('#otherid').val(query.otherId);
 }
-
-$('#connectToPeerJS').on('click', function () {
-    var peer = new Peer({
-        host: $('#host').val(),
-        port: $('#port').val(),
-        path: $('#path').val(),
-        secure: $('#ssl').is(':checked')
-    });
-
-    peer.on('open', function (id) {
-        $('#myid').val(id);
-
-        generateQRCode(id);
-
-        $('#connectToPeer').on('click', function () {
-            var otherid = $('#otherid').val();
-            var conn = peer.connect(otherid);
-            attachConnectionToChat(conn);
-            return false;
-        });
-
-        peer.on('connection', function (conn) {
-            attachConnectionToChat(conn);
-        });
-    });
-    return false;
-});
+if (query.host && query.port) {
+    connectToPeerJS();
+}
 
 var attachConnectionToChat = function (conn) {
     var connectedWith = $('#connectedWith');
